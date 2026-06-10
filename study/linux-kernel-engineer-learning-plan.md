@@ -94,6 +94,8 @@ Phase 6（月15-18）：虚拟化/Hypervisor + Rust + 开源贡献
 - [sysprog21/lkmpg](https://github.com/sysprog21/lkmpg) ⭐ — 内核模块编程指南，Phase 1 了解即可，Phase 2 重点用
 - [cirosantilli/linux-kernel-module-cheat](https://github.com/cirosantilli/linux-kernel-module-cheat) — QEMU + GDB 内核实验环境
 - [shizhengLi/linux-kernel-learning](https://github.com/shizhengLi/linux-kernel-learning) ⭐ — 中文，7阶段内核学习，55+分析文档
+- [mattpocock/skills](https://github.com/mattpocock/skills) ⭐124K — Agent Skill 工程化参考，可用于将自己的方法论固化为 AI 可执行的工作流
+- [study/ai-landscape-2026.md](./ai-landscape-2026.md) — 2026年 AI 辅助内核开发现状全景（面试/学习方向参考）
 
 **开发板（按需购买）**：
 - Raspberry Pi 4/5（¥300-500）— 学习 Linux 操作、命令行、简单驱动

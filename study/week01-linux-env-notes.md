@@ -270,3 +270,61 @@ clean:
 | `cannot use executable file as input to a link` | 编译 .o 时忘了加 `-c` |
 | `missing separator` | Makefile 命令行用了空格而不是 Tab |
 
+---
+
+## Day 5 — 指针与程序内存布局（C语言核心）
+
+### 学习日期
+2026-06-11
+
+### 指针本质
+
+- **指针是存地址的变量**，不是存值的变量
+- `&` 取地址运算符：`int *p = &a;` 把 a 的地址赋给 p
+- `*` 解引用运算符：`*p` 通过地址访问 a 的值
+
+```c
+int x = 42;
+int *p = &x;    // p 存的是 x 的地址
+printf("%d\n", *p);  // 42，通过 p 找到了 x 的值
+```
+
+### 程序内存布局（从低地址到高地址）
+
+```
+Text 段（代码） → Data 段（已初始化全局变量） → BSS 段（未初始化全局变量）
+→ Heap 堆（malloc 分配，向上增长） → Stack 栈（局部变量，向下增长）
+```
+
+**各段特点**：
+| 段 | 存什么 | 生命周期 |
+|----|--------|----------|
+| Text | 函数代码（main、func 等） | 程序启动到结束（只读） |
+| Data | 已初始化的全局/static 变量 | 程序启动到结束 |
+| BSS | 未初始化的全局/static 变量（默认 0） | 程序启动到结束 |
+| Heap | malloc/free 分配的内存 | malloc 到 free |
+| Stack | 局部变量、函数参数、返回地址 | 函数进入/退出 |
+
+### 验证结果
+
+在 WSL2 Ubuntu 24.04 运行验证程序，地址从低到高：
+```
+Text:    0x60de57cb221d  （最低）
+Data:    0x60de57cb5010
+BSS:     0x60de57cb5018
+Heap:    0x60de8dc132a0
+Stack:   0x7fff7fd0f914  （最高）
+```
+
+**关键直觉**：
+- 全局变量在所有函数外面，程序启动就分配好，直到结束才释放
+- 局部变量在函数内部，函数返回就没了
+- Stack 地址最高，因为从高往低增长
+- 空指针 *p = NULL; *p = 100; → Segment Fault（内核会 panic）
+
+### 与内核的联系
+
+- 内核进程的 `task_struct` 里全是指针：`struct task_struct *parent;`、`struct list_head tasks;`
+- `/proc/<pid>/maps` 可以看到进程的内存布局（用户态部分）
+- 内核用 `kmalloc` 而不是 `malloc`，用 `kfree` 而不是 `free`
+- 内核里空指针解引用 = kernel panic（不是 segment fault）
